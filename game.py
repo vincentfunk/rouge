@@ -4,35 +4,43 @@ from locations.map import Map
 from locations.grid import Grid
 from entities.player import Player
 from entities.monster import Monster
+
+
 class Game:
-    def __init__(self, ysize, xsize):
+    def __init__(self, ysize, xsize, player=None):
         self.map = Map(ysize, xsize)
         self.actorGrid = Grid(ysize, xsize)
-        self.player = None
-        self.addPlayer()
-        self.monsters = []
-        self.addMonsters()
+        self.player = self.add_player(player)
+        self.monsters = self.add_monsters()
 
-    def round(self, input):
+    def round(self, inkey):
         """one game round starting with player action then monster actions"""
-        if input in "wsad":
-            self.player.move(input)
+        # player input
+        if inkey in ['w', 's', 'a', 'd']:
+            self.player.move(inkey)
+        if inkey == ">" and self.player.y == self.map.next[0] and self.player.x == self.map.next[1]:
+            self.__init__(self.map.ysize, self.map.xsize, self.player)
 
+        # monster turns
         for mon in self.monsters:
-            # move closer logic to monster class and improve sidestep thing
-            # closer = self.closerDirect(mon, self.player)
             mon.moveCloser()
 
-    def addPlayer(self):
-        """creates player"""
-        y, x = self.map.randInsidePoint()
-        self.player = Player(self, y, x)
+    def add_player(self, player=None):
+        """creates player at start and updates position when moving level"""
+        y, x = self.map.rand_inside_point()
+        if player:
+            player.y = y
+            player.x = x
+            self.actorGrid[y][x] = player.marker
+        return player if player else Player(self, y, x)
 
-    def addMonsters(self):
-        """adds monsters"""
-        for i in range(3):
-            y, x = self.map.randInsidePoint()
-            self.monsters.append(Monster(self, y, x))
+    def add_monsters(self):
+        """adds monsters to game"""
+        mons = []
+        for i in range(random.randint(2, 5)):
+            y, x = self.map.rand_inside_point()
+            mons.append(Monster(self, y, x))
+        return mons
 
     def board(self):
         """outputs string of actorGrid overlaid over map.grid"""
@@ -48,26 +56,3 @@ class Game:
         out += '+' + '-' * len(self.map.grid[0]) + '+'
         return out
 
-    # def comparePos(self, e1, e2):
-    #     """1  3
-    #         e2
-    #        6  8"""
-    #     if e1.y <= e2.y and e1.x <= e2.x:
-    #         return 1
-    #     elif e1.y <= e2.y and e1.x > e2.x:
-    #         return 3
-    #     elif e1.y > e2.y and e1.x <= e2.x:
-    #         return 6
-    #     else:
-    #         return 8
-    #
-    # def closerDirect(self, e1, e2):
-    #     sector = self.comparePos(e1, e2)
-    #     if sector == 1:
-    #         return "s" if random.randint(0, 1) else "d"
-    #     elif sector == 3:
-    #         return "s" if random.randint(0, 1) else "a"
-    #     elif sector == 6:
-    #         return "w" if random.randint(0, 1) else "d"
-    #     elif sector == 8:
-    #         return "w" if random.randint(0, 1) else "a"

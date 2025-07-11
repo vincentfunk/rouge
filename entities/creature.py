@@ -19,9 +19,8 @@ class Creature:
         elif direction == 'd':
             target = self.y, self.x + 1
         else:
-            raise ValueError("movement must be wsad")
-        #if self.map.grid[target[0]][target[1]] in "·+#" and self.actorGrid[target[0]][target[1]] == ' ':
-        if target in self.game.map.validMoves() and self.game.actorGrid[target[0]][target[1]] == ' ':
+            raise ValueError(type(self), "movement must be wsad")
+        if target in self.game.map.valid_moves() and self.game.actorGrid[target[0]][target[1]] == ' ':
             self.game.actorGrid[self.y][self.x] = ' '
             self.game.actorGrid[target[0]][target[1]] = self.marker
             self.y, self.x = target

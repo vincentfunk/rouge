@@ -12,8 +12,9 @@ class Map:
         self.rooms = None
         self.halls = None
         self.create()
+        self.next = self.next()
 
-    def validMoves(self):
+    def valid_moves(self):
         """create list of valid inside points"""
         moves = []
         for room in self.rooms:
@@ -24,7 +25,7 @@ class Map:
                 moves.append(point)
         return moves
 
-    def randInsidePoint(self):
+    def rand_inside_point(self):
         """pick a random point inside a random room"""
         room = random.randint(0, len(self.rooms) - 1)
         y = random.randint(self.rooms[room].ymin + 1, self.rooms[room].ymax - 1)
@@ -32,7 +33,7 @@ class Map:
         return y, x
 
     def create(self):
-        """creates and displays the map"""
+        """creates the map"""
         room_count = random.randint(5, 7)
         hall_count = random.randint(room_count - 1, room_count + 1)
         for i in range(room_count + 1):
@@ -233,3 +234,7 @@ class Map:
             raise ValueError("Sector calculation failed")
         return sec
 
+    def next(self):
+        point = self.rand_inside_point()
+        self.grid[point[0]][point[1]] = '>'
+        return point
