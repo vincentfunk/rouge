@@ -6,6 +6,7 @@ class Creature:
         self.marker = '?'
         self.game.actorGrid[y][x] = self
         self.health = None
+        self.damage = None
         self.room = self.currentRoom()
 
     def move(self, direction):
@@ -26,8 +27,21 @@ class Creature:
             self.game.actorGrid[target[0]][target[1]] = self
             self.y, self.x = target
 
-    def attack(self, direction):
-        print('attack', direction)
+    def attack(self, target):
+        """damages target and then checks if they should die"""
+        # add attacking text output - different for player/monster
+        target.health -= self.damage
+        if target.health <= 0:
+            target.die()
+
+    def adjacent(self, target):
+        """checks if target is adjacent to this creature"""
+        if ((self.y + 1, self.x) == (target.y, target.x) or
+                (self.y - 1, self.x) == (target.y, target.x) or
+                (self.y, self.x - 1) == (target.y, target.x) or
+                (self.y, self.x + 1) == (target.y, target.x)):
+            return True
+        return False
 
     def currentRoom(self):
         pass

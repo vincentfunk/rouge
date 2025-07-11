@@ -19,7 +19,7 @@ class Game:
         # move or attack
         if inkey in ['w', 's', 'a', 'd']:
             target = self.target(self.player.y, self.player.x, inkey)
-            if type(self.actorGrid[target[0]][target[1]]) is Monster:
+            if type(target) is Monster:
                 self.player.attack(target)
             else:
                 self.player.move(inkey)
@@ -30,7 +30,10 @@ class Game:
 
         # monster turns
         for mon in self.monsters:
-            mon.move_closer()
+            if mon.adjacent(self.player):
+                mon.attack(self.player)
+            else:
+                mon.move_closer()
 
     def add_player(self, player=None):
         """creates player at start and updates position when moving level"""
@@ -64,11 +67,13 @@ class Game:
         return out
 
     def target(self, y, x, direction):
+        """returns what is at the actor grid in target keypress direction"""
         if direction == 'w':
-            return y - 1, x
+            return self.actorGrid[y - 1][x]
         elif direction == 's':
-            return y + 1, x
+            return self.actorGrid[y + 1][x]
         elif direction == 'a':
-            return y, x - 1
+            return self.actorGrid[y][x - 1]
         elif direction == 'd':
-            return y, x + 1
+            return self.actorGrid[y][x + 1]
+

@@ -1,5 +1,8 @@
+import time
+
 from game import Game
 from tkinter import Tk, Label
+from entities.player import DeadError
 
 game = Game(25, 75)
 
@@ -10,9 +13,14 @@ board.focus_set()
 
 
 def key_pressed(event):
-    game.round(event.char)
-    board.configure(text=game.board())
+    try:
+        game.round(event.char)
+        board.configure(text=game.board())
+    except DeadError as e:
+        root.quit()
+        print(e.message)
 
 
 board.bind("<Key>", key_pressed)
 root.mainloop()
+
