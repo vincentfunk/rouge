@@ -6,6 +6,7 @@ Requires tkinter
 Run "python runner.py" to see current working version
 
 Current Features
--Map generation
--Player movement
--Basic monster movement
+-Map generation  
+-Player movement  
+-Basic monster movement  
+-Next level door  
