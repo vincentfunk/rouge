@@ -1,23 +1,27 @@
 from entities.creature import Creature
-import random
+from random import randint
+
+
 class Monster(Creature):
     def __init__(self, game, y, x):
         super().__init__(game, y, x)
         self.marker = 'Z'
-        self.game.actorGrid[y][x] = self.marker
+        # self.game.actorGrid[y][x] = self.marker
+        self.health = randint(3, 5)
 
-    def moveCloser(self):
-        super().move(self.closerDirect(self, self.game.player))
+    def move_closer(self):
+        super().move(self.closer_direction(self, self.game.player))
 
-    def closerDirect(self, e1, e2):
+    def closer_direction(self, e1, e2):
         """1  3
             e2
            6  8"""
         if e1.y <= e2.y and e1.x <= e2.x:
-            return "s" if random.randint(0, 1) else "d"
+            return "s" if randint(0, 1) else "d"
         elif e1.y <= e2.y and e1.x > e2.x:
-            return "s" if random.randint(0, 1) else "a"
+            return "s" if randint(0, 1) else "a"
         elif e1.y > e2.y and e1.x <= e2.x:
-            return "w" if random.randint(0, 1) else "d"
+            return "w" if randint(0, 1) else "d"
         else:
-            return "w" if random.randint(0, 1) else "a"
+            return "w" if randint(0, 1) else "a"
+

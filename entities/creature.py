@@ -4,7 +4,8 @@ class Creature:
         self.y = y
         self.x = x
         self.marker = '?'
-        self.game.actorGrid[y][x] = self.marker
+        self.game.actorGrid[y][x] = self
+        self.health = None
         self.room = self.currentRoom()
 
     def move(self, direction):
@@ -22,8 +23,11 @@ class Creature:
             raise ValueError(type(self), "movement must be wsad")
         if target in self.game.map.valid_moves() and self.game.actorGrid[target[0]][target[1]] == ' ':
             self.game.actorGrid[self.y][self.x] = ' '
-            self.game.actorGrid[target[0]][target[1]] = self.marker
+            self.game.actorGrid[target[0]][target[1]] = self
             self.y, self.x = target
+
+    def attack(self, direction):
+        print('attack', direction)
 
     def currentRoom(self):
         pass
