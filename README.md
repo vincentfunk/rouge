@@ -10,3 +10,4 @@ Current Features
 -Player movement  
 -Basic monster movement  
 -Next level door  
+-Simple combat  
